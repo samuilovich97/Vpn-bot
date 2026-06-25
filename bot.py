@@ -35,14 +35,5 @@ async def main():
     print("Бот запущен!")
     await dp.start_polling(bot)
 
-if __name__ == "__main__":
-    # Запускаем бота в фоне, а в это время держим порт 10000 открытым
-    loop = asyncio.get_event_loop()
-    loop.create_task(main())
-    # Это нужно, чтобы Render думал, что приложение работает
-    import http.server
-    import socketserver
-    PORT = int(os.environ.get("PORT", 10000))
-    with socketserver.TCPServer(("0.0.0.0", PORT), http.server.SimpleHTTPRequestHandler) as httpd:
-        print(f"Сервер запущен на порту {PORT}")
-        httpd.serve_forever()
+# Запускаем простым способом
+asyncio.run(main())
