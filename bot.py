@@ -4,7 +4,7 @@ from aiogram.filters import Command
 from datetime import datetime, timedelta
 import os
 
-TOKEN = "8825073782:AAErAPS8efNyLKOrPKuY1WBiAAJSnU6eBpc"
+TOKEN = "8825073782:AAErAPS8efNyLKOrPKuWBiAAJSnU6eBpc"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 users = {}
@@ -32,8 +32,26 @@ async def getlink(m):
     await m.answer("🔗 Ваша ссылка: https://ваша-ссылка-тут")
 
 async def main():
-    print("Бот запущен!")
+    print("✅ Бот запущен!")
     await dp.start_polling(bot)
 
-# Запускаем простым способом
-asyncio.run(main())
+async def keep_alive():
+    # Запускаем простой веб-сервер на порту 10000
+    from aiohttp import web
+    app = web.Application()
+    async def hello(request):
+        return web.Response(text="Бот работает!")
+    app.router.add_get('/', hello)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, '0.0.0.0', int(os.environ.get("PORT", 10000)))
+    await site.start()
+    print(f"✅ Веб-сервер запущен на порту {os.environ.get('PORT', 10000)}")
+    await asyncio.Event().wait()  # бесконечно ждём
+
+async def main_with_server():
+    # Запускаем бота и веб-сервер параллельно
+    await asyncio.gather(main(), keep_alive())
+
+if __name__ == "__main__":
+    asyncio.run(main_with_server())
