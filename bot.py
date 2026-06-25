@@ -36,7 +36,6 @@ async def main():
     await dp.start_polling(bot)
 
 async def keep_alive():
-    # Запускаем простой веб-сервер на порту 10000
     from aiohttp import web
     app = web.Application()
     async def hello(request):
@@ -47,10 +46,9 @@ async def keep_alive():
     site = web.TCPSite(runner, '0.0.0.0', int(os.environ.get("PORT", 10000)))
     await site.start()
     print(f"✅ Веб-сервер запущен на порту {os.environ.get('PORT', 10000)}")
-    await asyncio.Event().wait()  # бесконечно ждём
+    await asyncio.Event().wait()
 
 async def main_with_server():
-    # Запускаем бота и веб-сервер параллельно
     await asyncio.gather(main(), keep_alive())
 
 if __name__ == "__main__":
