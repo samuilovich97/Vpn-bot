@@ -4,7 +4,7 @@ from aiogram.filters import Command
 from datetime import datetime, timedelta
 import os
 
-TOKEN = "8825073782:AAErAPS8efNyLKOrPKuWBiAAJSnU6eBpc"
+TOKEN = "8825073782:AAEY_ynopBO_Jy83_FAHjYVhrM90codVokw"
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 users = {}
