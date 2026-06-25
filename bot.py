@@ -2,6 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from datetime import datetime, timedelta
+import os
 
 TOKEN = "8825073782:AAErAPS8efNyLKOrPKuWBiAAJSnU6eBpc"
 bot = Bot(token=TOKEN)
@@ -35,4 +36,13 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    # Запускаем бота в фоне, а в это время держим порт 10000 открытым
+    loop = asyncio.get_event_loop()
+    loop.create_task(main())
+    # Это нужно, чтобы Render думал, что приложение работает
+    import http.server
+    import socketserver
+    PORT = int(os.environ.get("PORT", 10000))
+    with socketserver.TCPServer(("0.0.0.0", PORT), http.server.SimpleHTTPRequestHandler) as httpd:
+        print(f"Сервер запущен на порту {PORT}")
+        httpd.serve_forever()
